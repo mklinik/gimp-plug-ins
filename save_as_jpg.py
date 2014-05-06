@@ -27,49 +27,14 @@ import gtk
 import os, sys
 import collections
 
-def python_export_clean(img, drawable, quality, comment) :
+def python_export_clean(img, drawable) :
 	filename = img.filename
-	qual = quality/100
-#	fullpath = pdb.gimp_image_get_uri(img)
-#	pdb.gimp_message(filename)
-
-	if not filename :
-		chooser = gtk.FileChooserDialog(
-			title=None,action=gtk.FILE_CHOOSER_ACTION_SAVE,
-			buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_SAVE,gtk.RESPONSE_OK)
-			)
-		# save folder will be desktop
-		save_dir = os.path.join(os.path.expanduser('~'), 'Desktop')
-			
-		chooser.set_current_folder(save_dir)
-		chooser.set_current_name("UNTITLED.jpg")
-		chooser.set_do_overwrite_confirmation(True)
-		
-		filter = gtk.FileFilter()
-		filter.set_name("Save as JPG")
-		filter.add_pattern("*.jpg")
-		chooser.add_filter(filter) 
-		
-		response = chooser.run()
-		if response != gtk.RESPONSE_OK:
-			return
-		filename = chooser.get_filename()
-		img.filename = filename
-		chooser.destroy()
-	
-		pdb.file_jpeg_save(img, drawable, filename, filename, qual, 0, 0, 0, comment, 0, 1, 0, 0)
-		pdb.gimp_image_clean_all(img)		
-			
-		
-	else:
+	quality = 0.9
+	if filename :
 		base = os.path.splitext(filename)[0]
 		newname = base + ".jpg"
-
-		pdb.gimp_edit_copy(img.active_drawable)
-		image2 = pdb.gimp_edit_paste_as_new()
-		pdb.file_jpeg_save(image2, drawable, newname, newname, qual, 0, 0, 0, comment, 0, 1, 0, 0)
-		pdb.gimp_image_delete(image2)		
-		pdb.gimp_image_clean_all(img)
+		pdb.file_jpeg_save(img, drawable, newname, newname, quality, 0, 0, 0, "", 0, 1, 0, 0)
+                pdb.gimp_image_clean_all(img)
 
 
 register(
@@ -84,8 +49,6 @@ register(
 		[
 			(PF_IMAGE, "image", "Input image", None),
 			(PF_DRAWABLE, "drawable", "Input drawable", None),
-			(PF_SLIDER, "quality", "Set the JPG output quality", 90, (30, 100, 5) ),
-			(PF_STRING, "comment", "Write comment (unseen) into file... ", "" )
 		],
 		[],
 		python_export_clean,
