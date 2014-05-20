@@ -23,8 +23,7 @@ def calculateNewDimensions(oldWidth, oldHeight):
 
     return newWidth, newHeight
 
-# our script
-def my_script_function(image, drawable) :
+def mkl_workflow_parameterized(image, drawable, unsharpRadiusFirstPass, unsharpAmountFirstPass, doSave) :
 
     pdb.plug_in_unsharp_mask(image, drawable, unsharpRadiusFirstPass, unsharpAmountFirstPass, 0)
     oldWidth = drawable.width
@@ -33,14 +32,18 @@ def my_script_function(image, drawable) :
     pdb.gimp_image_scale(image, newWidth, newHeight)
     pdb.plug_in_unsharp_mask(image, drawable, 0.1, 0.1, 0)
 
-    filename = image.filename
-    base = os.path.splitext(filename)[0]
-    newName = base + ".jpg"
-    quality = 0.9
-    pdb.file_jpeg_save(image, drawable, newName, newName, quality, 0, 0, 0, "", 0, 1, 0, 0)
-    pdb.gimp_image_clean_all(image)
-    #gprint("saved %dx%d %s" % (newWidth, newHeight, os.path.split(newName)[-1]))
+    if doSave:
+        filename = image.filename
+        base = os.path.splitext(filename)[0]
+        newName = base + ".jpg"
+        quality = 0.9
+        pdb.file_jpeg_save(image, drawable, newName, newName, quality, 0, 0, 0, "", 0, 1, 0, 0)
+        pdb.gimp_image_clean_all(image)
 
+    return
+
+def mkl_workflow_standard(image, drawable) :
+    mkl_workflow_parameterized(image, drawable, 3.0, 0.3, True)
     return
 
 # This is the plugin registration function
@@ -55,7 +58,25 @@ register(
     , "*"
     , []
     , []
-    , my_script_function
+    , mkl_workflow_standard
+    )
+
+register(
+      "mkl_workflow_parameterized"
+    , "raw to jpg with given parameters"
+    , "applies in this order: unsharp mask, downscale, unsharp mask, save as jpg"
+    , "Markus Klinik"
+    , ""
+    , "2014"
+    , "<Image>/MyScripts/Parametrized Sharpen and Scale"
+    , "*"
+    , [ (PF_FLOAT, 'unsharpRadiusFirstPass', 'Unsharp radius for the first pass', 3.0)
+      , (PF_FLOAT, 'unsharpAmountFirstPass', 'Unsharp amount for the first pass', 0.3)
+      , (PF_BOOL,  'doSave', 'Save afterwards', True)
+      ]
+    , []
+    , mkl_workflow_parameterized
     )
 
 main()
+
