@@ -26,6 +26,7 @@ def calculateNewDimensions(oldWidth, oldHeight, proposedNewWidth, proposedNewHei
     return newWidth, newHeight
 
 def mkl_workflow_parameterized(image, drawable,
+    performFirstPass,
     unsharpRadiusFirstPass,
     unsharpAmountFirstPass,
     proposedNewWidth,
@@ -39,7 +40,8 @@ def mkl_workflow_parameterized(image, drawable,
     pdb.gimp_context_set_interpolation(INTERPOLATION_LANCZOS)
 
     # sharpen the original image
-    pdb.plug_in_unsharp_mask(image, drawable, unsharpRadiusFirstPass, unsharpAmountFirstPass, 0)
+    if( performFirstPass ):
+        pdb.plug_in_unsharp_mask(image, drawable, unsharpRadiusFirstPass, unsharpAmountFirstPass, 0)
 
     oldWidth = drawable.width
     oldHeight = drawable.height
@@ -68,6 +70,7 @@ def mkl_workflow_standard(image, drawable) :
     mkl_workflow_parameterized(
       image,
       drawable,
+      True,
       defaultUnsharpRadiusFirstPass,
       defaultUnsharpAmountFirstPass,
       defaultProposedNewWidth,
@@ -99,7 +102,8 @@ register(
     , "2014"
     , "<Image>/MyScripts/Parametrized Sharpen and Scale"
     , "*"
-    , [ (PF_FLOAT, 'unsharpRadiusFirstPass', 'Unsharp radius for the first pass', defaultUnsharpRadiusFirstPass)
+    , [ (PF_BOOL,  'performFirstPass', 'perform first pass sharpen', True)
+      , (PF_FLOAT, 'unsharpRadiusFirstPass', 'Unsharp radius for the first pass', defaultUnsharpRadiusFirstPass)
       , (PF_FLOAT, 'unsharpAmountFirstPass', 'Unsharp amount for the first pass', defaultUnsharpAmountFirstPass)
       , (PF_INT, 'proposedNewWidth', 'new width for landscape photos', defaultProposedNewWidth)
       , (PF_INT, 'proposedNewHeight', 'new height for portrait photos', defaultProposedNewHeight)
