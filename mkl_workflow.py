@@ -34,7 +34,11 @@ def mkl_workflow_parameterized(image, drawable,
     proposedNewHeight,
     doSave) :
 
+    # put everything in one undo step
     pdb.gimp_image_undo_group_start(image)
+
+    # set interpolation method to the best one
+    pdb.gimp_context_set_interpolation(INTERPOLATION_LANCZOS)
 
     # sharpen the original image
     pdb.plug_in_unsharp_mask(image, drawable, unsharpRadiusFirstPass, unsharpAmountFirstPass, 0)
