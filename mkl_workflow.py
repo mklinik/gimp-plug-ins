@@ -29,7 +29,12 @@ def calculateNewDimensions(oldWidth, oldHeight, proposedNewWidth, proposedNewHei
 
     return newWidth, newHeight
 
-def mkl_workflow_parameterized(image, drawable, unsharpRadiusFirstPass, unsharpAmountFirstPass, proposedNewWidth, proposedNewHeight, doSave) :
+def mkl_workflow_parameterized(image, drawable,
+    unsharpRadiusFirstPass,
+    unsharpAmountFirstPass,
+    proposedNewWidth,
+    proposedNewHeight,
+    doSave) :
 
     pdb.plug_in_unsharp_mask(image, drawable, unsharpRadiusFirstPass, unsharpAmountFirstPass, 0)
     oldWidth = drawable.width
