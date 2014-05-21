@@ -36,6 +36,8 @@ def mkl_workflow_parameterized(image, drawable,
     proposedNewHeight,
     doSave) :
 
+    pdb.gimp_image_undo_group_start(image)
+
     pdb.plug_in_unsharp_mask(image, drawable, unsharpRadiusFirstPass, unsharpAmountFirstPass, 0)
     oldWidth = drawable.width
     oldHeight = drawable.height
@@ -50,6 +52,8 @@ def mkl_workflow_parameterized(image, drawable,
         quality = 0.95
         pdb.file_jpeg_save(image, drawable, newName, newName, quality, 0, 0, 0, "", 0, 1, 0, 0)
         pdb.gimp_image_clean_all(image)
+
+    pdb.gimp_image_undo_group_end(image)
 
     return
 
