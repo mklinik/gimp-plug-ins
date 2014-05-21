@@ -39,11 +39,11 @@ def python_export_clean(img, drawable) :
 
 register(
 		"python_fu_save_as_JPG",
-		"Save the image as a JPG file, set the output quality\nand include a comment if desired...\n\nFor more options and a proper file overwrite protected dialog, \nuse the FILE > EXPORT menu item when saving as a JPG.\n\n",
+		"Save the image as a JPG file.\n\nFor more options and a proper file overwrite protected dialog, \nuse the FILE > EXPORT menu item when saving as a JPG.\n\n",
 		"",
-		"Paul Sherman",
+		"Paul Sherman, Markus Klinik",
 		"GPL",
-		"2012",
+		"2014",
 		"Save as JPG",
 		"*",
 		[
