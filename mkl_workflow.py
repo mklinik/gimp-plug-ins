@@ -14,8 +14,6 @@ defaultDoSave = True
 # If the image is in landscape format, width is fixed and height adjusted proportionally.
 # If the image is in portrait format, height is fixed and width adjusted proportionally.
 def calculateNewDimensions(oldWidth, oldHeight, proposedNewWidth, proposedNewHeight):
-    newWidth = oldWidth
-    newHeight = oldHeight
     if oldWidth > oldHeight: # landscape
       newWidth = proposedNewWidth
       ratio = newWidth / oldWidth
