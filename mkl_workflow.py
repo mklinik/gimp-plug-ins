@@ -6,8 +6,8 @@ import os
 
 defaultUnsharpRadiusFirstPass = 3.0
 defaultUnsharpAmountFirstPass = 0.3
-defaultProposedNewWidth = 1000
-defaultProposedNewHeight = 800
+defaultProposedNewWidth = 1200
+defaultProposedNewHeight = 1000
 defaultDoSave = True
 
 # Calculates scaled down dimensions for an image.
