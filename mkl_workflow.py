@@ -10,11 +10,9 @@ defaultProposedNewWidth = 1000
 defaultProposedNewHeight = 800
 defaultDoSave = True
 
-# create an output function that redirects to gimp's Error Console
-def gprint( text ):
-   pdb.gimp_message(text)
-   return
-
+# Calculates scaled down dimensions for an image.
+# If the image is in landscape format, width is fixed and height adjusted proportionally.
+# If the image is in portrait format, height is fixed and width adjusted proportionally.
 def calculateNewDimensions(oldWidth, oldHeight, proposedNewWidth, proposedNewHeight):
     newWidth = oldWidth
     newHeight = oldHeight
@@ -22,7 +20,7 @@ def calculateNewDimensions(oldWidth, oldHeight, proposedNewWidth, proposedNewHei
       newWidth = proposedNewWidth
       ratio = newWidth / oldWidth
       newHeight = oldHeight * ratio
-    else:
+    else: # portrait
       newHeight = proposedNewHeight
       ratio = newHeight / oldHeight
       newWidth = oldWidth * ratio
@@ -38,13 +36,20 @@ def mkl_workflow_parameterized(image, drawable,
 
     pdb.gimp_image_undo_group_start(image)
 
+    # sharpen the original image
     pdb.plug_in_unsharp_mask(image, drawable, unsharpRadiusFirstPass, unsharpAmountFirstPass, 0)
+
     oldWidth = drawable.width
     oldHeight = drawable.height
     newWidth, newHeight = calculateNewDimensions(oldWidth, oldHeight, proposedNewWidth, proposedNewHeight)
+
+    # scale for screen viewing
     pdb.gimp_image_scale(image, newWidth, newHeight)
+
+    # sharpen for screen viewing
     pdb.plug_in_unsharp_mask(image, drawable, 0.1, 0.1, 0)
 
+    # save as jpg without asking
     if doSave:
         filename = image.filename
         base = os.path.splitext(filename)[0]
