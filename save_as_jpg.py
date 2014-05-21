@@ -29,7 +29,7 @@ import collections
 
 def python_export_clean(img, drawable) :
 	filename = img.filename
-	quality = 0.9
+	quality = 0.95
 	if filename :
 		base = os.path.splitext(filename)[0]
 		newname = base + ".jpg"
